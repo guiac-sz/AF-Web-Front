@@ -1,0 +1,76 @@
+<h1>Movimentações Financeiras</h1>
+
+<section>
+  <h2>Nova movimentação</h2>
+
+  <form (ngSubmit)="criar()">
+    <div>
+      <label>Descrição</label>
+      <input [(ngModel)]="descricao" name="descricao" required />
+    </div>
+
+    <div>
+      <label>Categoria</label>
+      <input [(ngModel)]="categoria" name="categoria" required />
+    </div>
+
+    <div>
+      <label>Tipo</label>
+      <select [(ngModel)]="tipo" name="tipo">
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Valor</label>
+      <input type="number" [(ngModel)]="valor" name="valor" required />
+    </div>
+
+    <div>
+      <label>Data</label>
+      <input type="date" [(ngModel)]="data" name="data" required />
+    </div>
+
+    <button type="submit" [disabled]="salvando">Salvar</button>
+  </form>
+
+  @if (erro) {
+    <p style="color:red">{{ erro }}</p>
+  }
+</section>
+
+<hr>
+
+<section>
+  <h2>Lista</h2>
+  <p><strong>Saldo:</strong> R$ {{ saldo }}</p>
+  <button (click)="carregar()" [disabled]="carregando">Recarregar</button>
+
+  @if (carregando) {
+    <p>Carregando...</p>
+  } @else {
+    @if (movimentacoes.length === 0) {
+      <p>Nenhuma movimentação registrada.</p>
+    } @else {
+
+  <div>
+    <label>Filtrar por categoria:</label>
+    <input [(ngModel)]="filtroCategoria" name="filtroCategoria" />
+  </div>
+
+      <ul>
+        @for (m of filtradas; track m._id) {
+          <li>
+            <strong>{{ m.descricao }}</strong>
+            — {{ m.categoria }}
+            — {{ m.tipo }}
+            — R$ {{ m.valor }}
+            — {{ m.data | date }}
+            <button (click)="excluir(m._id!)">Excluir</button>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>
